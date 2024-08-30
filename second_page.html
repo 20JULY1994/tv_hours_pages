@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lawal Omotola">
+
+<title>Ebola Sierra Leone analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="second_page_files/libs/clipboard/clipboard.min.js"></script>
+<script src="second_page_files/libs/quarto-html/quarto.js"></script>
+<script src="second_page_files/libs/quarto-html/popper.min.js"></script>
+<script src="second_page_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="second_page_files/libs/quarto-html/anchor.min.js"></script>
+<link href="second_page_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="second_page_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="second_page_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="second_page_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="second_page_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="second_page_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="second_page_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<script src="second_page_files/libs/plotly-binding-4.10.4/plotly.js"></script>
+
+<script src="second_page_files/libs/typedarray-0.1/typedarray.min.js"></script>
+
+<script src="second_page_files/libs/jquery-3.5.1/jquery.min.js"></script>
+
+<link href="second_page_files/libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="second_page_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+<link href="second_page_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
+<script src="second_page_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Ebola Sierra Leone analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lawal Omotola </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">6/29/24</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="load-packages--" class="level1">
+<h1>Load packages —-</h1>
+</section>
+<section id="load-data--" class="level1">
+<h1>Load data —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"C:/Users/Hon.Olayinka/Documents/GitHub/tv_hours_pages/ebola_sierra_leone.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="explore-data--" class="level1">
+<h1>Explore data —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+     id   age sex   status    date_of_onset date_of_sample district
+  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;date&gt;        &lt;date&gt;         &lt;chr&gt;   
+1    92     6 M     confirmed 2014-06-10    2014-06-15     Kailahun
+2    51    46 F     confirmed 2014-05-30    2014-06-04     Kailahun
+3   230    NA M     confirmed 2014-06-26    2014-06-30     Kenema  
+4   139    25 F     confirmed 2014-06-13    2014-06-18     Kailahun
+5     8     8 F     confirmed 2014-05-22    2014-05-27     Kailahun
+6   215    49 M     confirmed 2014-06-24    2014-06-29     Kailahun</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200   7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       id              age            sex               status         
+ Min.   :  1.00   Min.   : 1.80   Length:200         Length:200        
+ 1st Qu.: 62.75   1st Qu.:20.00   Class :character   Class :character  
+ Median :131.50   Median :35.00   Mode  :character   Mode  :character  
+ Mean   :136.72   Mean   :33.85                                        
+ 3rd Qu.:208.25   3rd Qu.:45.00                                        
+ Max.   :285.00   Max.   :80.00                                        
+                  NA's   :4                                            
+ date_of_onset        date_of_sample         district        
+ Min.   :2014-05-18   Min.   :2014-05-23   Length:200        
+ 1st Qu.:2014-06-01   1st Qu.:2014-06-07   Class :character  
+ Median :2014-06-13   Median :2014-06-18   Mode  :character  
+ Mean   :2014-06-12   Mean   :2014-06-17                     
+ 3rd Qu.:2014-06-23   3rd Qu.:2014-06-29                     
+ Max.   :2014-06-29   Max.   :2014-07-17                     
+                                                             </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_dat</span>(ebola_sierra_leone)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="categorical-overview--" class="level1">
+<h1>Categorical overview —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cat_summary <span class="ot">&lt;-</span> <span class="fu">inspect_cat</span>(ebola_sierra_leone)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cat_summary_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(cat_summary) <span class="co"># function nesting</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(cat_summary_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-42e800ee959a50c2103c" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-42e800ee959a50c2103c">{"x":{"data":[{"orientation":"h","width":0.89999999999999991,"base":1,"x":[0],"y":[1],"text":"col_name: status<br />prop: 0.000<br />new_level_key: High cardinality-status-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(139,0,139,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(High cardinality-status-ebola_sierra_leone,1)","legendgroup":"(High cardinality-status-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.89999999999999991,"base":0.91000000000000003,"x":[0.089999999999999969],"y":[1],"text":"col_name: status<br />prop: 0.090<br />new_level_key: suspected-status-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,218,215,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(suspected-status-ebola_sierra_leone,1)","legendgroup":"(suspected-status-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.89999999999999991,"base":0,"x":[0.91000000000000003],"y":[1],"text":"col_name: status<br />prop: 0.910<br />new_level_key: confirmed-status-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,118,110,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(confirmed-status-ebola_sierra_leone,1)","legendgroup":"(confirmed-status-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000013,"base":1,"x":[0],"y":[2],"text":"col_name: sex<br />prop: 0.000<br />new_level_key: High cardinality-sex-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(139,0,139,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(High cardinality-sex-ebola_sierra_leone,1)","legendgroup":"(High cardinality-sex-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000013,"base":0.56999999999999995,"x":[0.43000000000000005],"y":[2],"text":"col_name: sex<br />prop: 0.430<br />new_level_key: M-sex-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(230,230,186,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(M-sex-ebola_sierra_leone,1)","legendgroup":"(M-sex-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000013,"base":0,"x":[0.56999999999999995],"y":[2],"text":"col_name: sex<br />prop: 0.570<br />new_level_key: F-sex-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(163,165,0,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(F-sex-ebola_sierra_leone,1)","legendgroup":"(F-sex-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":1,"x":[0],"y":[3],"text":"col_name: district<br />prop: 0.000<br />new_level_key: High cardinality-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(139,0,139,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(High cardinality-district-ebola_sierra_leone,1)","legendgroup":"(High cardinality-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.995,"x":[0.0050000000000000044],"y":[3],"text":"col_name: district<br />prop: 0.005<br />new_level_key: Kambia-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(229,248,241,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Kambia-district-ebola_sierra_leone,1)","legendgroup":"(Kambia-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.98499999999999999,"x":[0.010000000000000009],"y":[3],"text":"col_name: district<br />prop: 0.010<br />new_level_key: Port Loko-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(224,247,239,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Port Loko-district-ebola_sierra_leone,1)","legendgroup":"(Port Loko-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.97500000000000009,"x":[0.0099999999999998979],"y":[3],"text":"col_name: district<br />prop: 0.010<br />new_level_key: Kono-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(213,244,234,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Kono-district-ebola_sierra_leone,1)","legendgroup":"(Kono-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96500000000000008,"x":[0.010000000000000009],"y":[3],"text":"col_name: district<br />prop: 0.010<br />new_level_key: Bo-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(203,242,228,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Bo-district-ebola_sierra_leone,1)","legendgroup":"(Bo-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.94500000000000006,"x":[0.020000000000000018],"y":[3],"text":"col_name: district<br />prop: 0.020<br />new_level_key: Western Urban-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(193,239,223,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Western Urban-district-ebola_sierra_leone,1)","legendgroup":"(Western Urban-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.77500000000000002,"x":[0.17000000000000004],"y":[3],"text":"col_name: district<br />prop: 0.170<br />new_level_key: Kenema-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(173,234,213,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Kenema-district-ebola_sierra_leone,1)","legendgroup":"(Kenema-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0,"x":[0.77500000000000002],"y":[3],"text":"col_name: district<br />prop: 0.775<br />new_level_key: Kailahun-district-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,191,125,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(Kailahun-district-ebola_sierra_leone,1)","legendgroup":"(Kailahun-district-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":1,"x":[0],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.000<br />new_level_key: High cardinality-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(139,0,139,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(High cardinality-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(High cardinality-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.995,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-07-14-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(250,253,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-14-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-14-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.98999999999999999,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-07-12-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,253,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-12-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-12-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.98499999999999999,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-07-11-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(247,252,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-11-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-11-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.97999999999999998,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-07-09-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(246,252,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-09-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-09-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.97499999999999998,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-07-04-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(244,251,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-04-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-04-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96999999999999997,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-28-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(243,251,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-28-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-28-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96499999999999997,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-26-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(241,250,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-26-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-26-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.95999999999999996,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-20-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(240,250,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-20-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-20-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.95499999999999996,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-16-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(239,250,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-16-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-16-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.94999999999999996,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-14-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(237,249,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-14-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-14-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.94500000000000006,"x":[0.0049999999999998934],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-05-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(236,249,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-05-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-05-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.94000000000000006,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-06-02-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(235,248,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-02-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-02-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.93500000000000005,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-05-29-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(233,248,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-29-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-29-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.93000000000000005,"x":[0.0050000000000000044],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.005<br />new_level_key: 2014-05-23-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(232,247,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-23-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-23-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.92000000000000004,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-07-17-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(231,247,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-17-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-17-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.91000000000000003,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-07-08-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(228,246,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-08-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-08-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.90000000000000002,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-07-01-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(225,245,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-01-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-01-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.89000000000000001,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-06-12-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(222,244,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-12-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-12-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.88,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-06-07-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(219,244,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-07-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-07-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.87,"x":[0.010000000000000009],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.010<br />new_level_key: 2014-05-25-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(217,243,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-25-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-25-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.85499999999999998,"x":[0.015000000000000013],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.015<br />new_level_key: 2014-07-05-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(214,242,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-05-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-05-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.83999999999999997,"x":[0.015000000000000013],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.015<br />new_level_key: 2014-06-27-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(210,241,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-27-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-27-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.82499999999999996,"x":[0.015000000000000013],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.015<br />new_level_key: 2014-06-25-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(206,239,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-25-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-25-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.81000000000000005,"x":[0.014999999999999902],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.015<br />new_level_key: 2014-06-21-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(201,238,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-21-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-21-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.79000000000000004,"x":[0.020000000000000018],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.020<br />new_level_key: 2014-06-13-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(197,237,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-13-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-13-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.77000000000000002,"x":[0.020000000000000018],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.020<br />new_level_key: 2014-06-11-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(192,235,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-11-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-11-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.75,"x":[0.020000000000000018],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.020<br />new_level_key: 2014-06-10-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(186,233,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-10-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-10-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.72999999999999998,"x":[0.020000000000000018],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.020<br />new_level_key: 2014-05-26-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(181,232,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-26-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-26-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.70499999999999996,"x":[0.025000000000000022],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.025<br />new_level_key: 2014-06-30-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(175,230,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-30-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-30-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.68000000000000005,"x":[0.024999999999999911],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.025<br />new_level_key: 2014-06-29-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(168,228,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-29-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-29-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.65500000000000003,"x":[0.025000000000000022],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.025<br />new_level_key: 2014-06-23-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(161,226,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-23-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-23-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.63,"x":[0.025000000000000022],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.025<br />new_level_key: 2014-06-06-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(154,223,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-06-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-06-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.60499999999999998,"x":[0.025000000000000022],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.025<br />new_level_key: 2014-05-27-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(147,221,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-27-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-27-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.57499999999999996,"x":[0.030000000000000027],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.030<br />new_level_key: 2014-06-17-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(141,219,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-17-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-17-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.54500000000000004,"x":[0.029999999999999916],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.030<br />new_level_key: 2014-06-04-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(132,217,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-04-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-04-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.51000000000000001,"x":[0.035000000000000031],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.035<br />new_level_key: 2014-06-22-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(124,214,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-22-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-22-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.47499999999999998,"x":[0.035000000000000031],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.035<br />new_level_key: 2014-06-01-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(114,211,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-01-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-01-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.44,"x":[0.034999999999999976],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.035<br />new_level_key: 2014-05-31-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(105,208,249,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-31-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-05-31-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.40000000000000002,"x":[0.03999999999999998],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.040<br />new_level_key: 2014-06-19-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(95,205,249,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-19-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-19-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.35499999999999998,"x":[0.04500000000000004],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.045<br />new_level_key: 2014-07-03-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(84,202,248,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-03-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-03-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.31,"x":[0.044999999999999984],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.045<br />new_level_key: 2014-06-24-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(71,198,248,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-24-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-24-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.26500000000000001,"x":[0.044999999999999984],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.045<br />new_level_key: 2014-06-03-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(59,194,248,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-03-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-03-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.185,"x":[0.080000000000000016],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.080<br />new_level_key: 2014-06-18-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(46,190,247,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-18-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-18-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.095000000000000001,"x":[0.089999999999999997],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.090<br />new_level_key: 2014-07-02-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(24,183,246,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-07-02-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-07-02-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0,"x":[0.095000000000000001],"y":[4],"text":"col_name: date_of_sample<br />prop: 0.095<br />new_level_key: 2014-06-15-date_of_sample-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,176,246,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-15-date_of_sample-ebola_sierra_leone,1)","legendgroup":"(2014-06-15-date_of_sample-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":1,"x":[0],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.000<br />new_level_key: High cardinality-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(139,0,139,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(High cardinality-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(High cardinality-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.995,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-23-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(254,251,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-23-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-23-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.98999999999999999,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-16-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(254,251,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-16-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-16-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.98499999999999999,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-11-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(254,250,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-11-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-11-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.97999999999999998,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-09-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(254,249,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-09-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-09-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.97499999999999998,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-03-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,248,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-03-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-03-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96999999999999997,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-06-02-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,247,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-02-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-02-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96500000000000008,"x":[0.0049999999999998934],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-05-24-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,247,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-24-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-24-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.96000000000000008,"x":[0.0050000000000000044],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.005<br />new_level_key: 2014-05-18-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,246,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-18-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-18-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.95000000000000007,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-06-22-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,245,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-22-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-22-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.94000000000000006,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-06-17-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,243,254,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-17-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-17-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.93000000000000005,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-06-15-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(252,242,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-15-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-15-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.92000000000000004,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-06-07-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(252,240,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-07-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-07-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.91000000000000003,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-05-31-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(252,239,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-31-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-31-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.90000000000000002,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-05-28-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(252,237,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-28-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-28-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.89000000000000001,"x":[0.010000000000000009],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.010<br />new_level_key: 2014-05-20-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(251,235,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-20-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-20-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.875,"x":[0.015000000000000013],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.015<br />new_level_key: 2014-06-21-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(251,234,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-21-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-21-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.85999999999999999,"x":[0.015000000000000013],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.015<br />new_level_key: 2014-06-05-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(251,231,253,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-05-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-05-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.84000000000000008,"x":[0.019999999999999907],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.020<br />new_level_key: 2014-06-18-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(250,229,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-18-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-18-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.82000000000000006,"x":[0.020000000000000018],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.020<br />new_level_key: 2014-06-06-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(250,226,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-06-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-06-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.80000000000000004,"x":[0.020000000000000018],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.020<br />new_level_key: 2014-05-21-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(249,222,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-21-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-21-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.77500000000000002,"x":[0.025000000000000022],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.025<br />new_level_key: 2014-06-25-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(249,219,252,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-25-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-25-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.75,"x":[0.025000000000000022],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.025<br />new_level_key: 2014-06-08-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,215,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-08-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-08-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.72499999999999998,"x":[0.025000000000000022],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.025<br />new_level_key: 2014-06-01-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(247,211,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-01-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-01-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.70000000000000007,"x":[0.024999999999999911],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.025<br />new_level_key: 2014-05-22-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(247,207,251,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-22-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-22-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.67000000000000004,"x":[0.030000000000000027],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.030<br />new_level_key: 2014-06-20-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(246,203,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-20-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-20-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.64000000000000001,"x":[0.030000000000000027],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.030<br />new_level_key: 2014-05-30-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(245,198,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-30-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-30-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.60999999999999999,"x":[0.030000000000000027],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.030<br />new_level_key: 2014-05-26-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(245,193,250,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-26-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-26-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.57500000000000007,"x":[0.03499999999999992],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.035<br />new_level_key: 2014-06-29-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(244,189,249,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-29-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-29-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.54000000000000004,"x":[0.035000000000000031],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.035<br />new_level_key: 2014-06-12-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(243,183,249,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-12-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-12-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.505,"x":[0.035000000000000031],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.035<br />new_level_key: 2014-05-27-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(242,177,248,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-27-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-27-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.46500000000000002,"x":[0.03999999999999998],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.040<br />new_level_key: 2014-06-26-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(241,172,248,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-26-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-26-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.42499999999999999,"x":[0.040000000000000036],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.040<br />new_level_key: 2014-06-24-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(240,165,247,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-24-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-24-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.38500000000000001,"x":[0.03999999999999998],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.040<br />new_level_key: 2014-06-19-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(239,159,247,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-19-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-19-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.34000000000000002,"x":[0.044999999999999984],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.045<br />new_level_key: 2014-05-29-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(238,152,246,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-05-29-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-05-29-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.29000000000000004,"x":[0.049999999999999989],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.050<br />new_level_key: 2014-06-14-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(237,145,246,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-14-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-14-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.23500000000000001,"x":[0.055000000000000021],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.055<br />new_level_key: 2014-06-28-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(235,137,245,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-28-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-28-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.17999999999999999,"x":[0.055000000000000021],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.055<br />new_level_key: 2014-06-27-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(234,128,244,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-27-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-27-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0.10000000000000001,"x":[0.079999999999999988],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.080<br />new_level_key: 2014-06-13-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(233,119,244,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-13-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-13-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"h","width":0.90000000000000036,"base":0,"x":[0.10000000000000001],"y":[5],"text":"col_name: date_of_onset<br />prop: 0.100<br />new_level_key: 2014-06-10-date_of_onset-ebola_sierra_leone","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(231,107,243,1)","line":{"width":0.75590551181102372,"color":"rgba(0,0,0,1)"}},"name":"(2014-06-10-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-10-date_of_onset-ebola_sierra_leone,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"name":"(High cardinality-status-ebola_sierra_leone,0)","legendgroup":"(High cardinality-status-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(confirmed-status-ebola_sierra_leone,1)","legendgroup":"(confirmed-status-ebola_sierra_leone,1)","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(High cardinality-sex-ebola_sierra_leone,0)","legendgroup":"(High cardinality-sex-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(M-sex-ebola_sierra_leone,0)","legendgroup":"(M-sex-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(F-sex-ebola_sierra_leone,1)","legendgroup":"(F-sex-ebola_sierra_leone,1)","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(High cardinality-district-ebola_sierra_leone,0)","legendgroup":"(High cardinality-district-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(Kenema-district-ebola_sierra_leone,1)","legendgroup":"(Kenema-district-ebola_sierra_leone,1)","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(Kailahun-district-ebola_sierra_leone,1)","legendgroup":"(Kailahun-district-ebola_sierra_leone,1)","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(High cardinality-date_of_sample-ebola_sierra_leone,0)","legendgroup":"(High cardinality-date_of_sample-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(High cardinality-date_of_onset-ebola_sierra_leone,0)","legendgroup":"(High cardinality-date_of_onset-ebola_sierra_leone,0)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null},{"name":"(2014-06-10-date_of_onset-ebola_sierra_leone,1)","legendgroup":"(2014-06-10-date_of_onset-ebola_sierra_leone,1)","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","x":[null],"y":[null],"frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":13.881278538812786,"l":92.785388127853906},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Frequency of categorical levels in df::ebola_sierra_leone","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.050000000000000003,1.05],"tickmode":"array","ticktext":["0.00","0.25","0.50","0.75","1.00"],"tickvals":[0,0.25,0.5,0.75,1],"categoryorder":"array","categoryarray":["0.00","0.25","0.50","0.75","1.00"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":false,"tickfont":{"color":null,"family":null,"size":0},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,5.5999999999999996],"tickmode":"array","ticktext":["status","sex","district","date_of_sample","date_of_onset"],"tickvals":[1,2,3,4,5],"categoryorder":"array","categoryarray":["status","sex","district","date_of_sample","date_of_onset"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"4d5864f23e04":{"x":{},"y":{},"fill":{},"type":"bar"},"4d584c8e55e":{"x":{},"y":{},"label":{},"fill":{},"colour":{},"ymin":{},"ymax":{}}},"cur_data":"4d5864f23e04","visdat":{"4d5864f23e04":["function (y) ","x"],"4d584c8e55e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="numerical-overview--" class="level1">
+<h1>Numerical overview —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>num_summary <span class="ot">&lt;-</span> <span class="fu">inspect_num</span>(ebola_sierra_leone)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>num_summary_plot <span class="ot">&lt;-</span> <span class="fu">show_plot</span>(num_summary)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(num_summary_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-bad9a3b1f6d156d71fdc" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-bad9a3b1f6d156d71fdc">{"x":{"data":[{"orientation":"v","width":4.5,"base":0,"x":[77.5],"y":[0.0051020408163265302],"text":"mid:  77.5<br />prop: 0.005102041<br />prop_z: 0.03703704","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(0,191,125,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[72.5],"y":[0.01020408163265306],"text":"mid:  72.5<br />prop: 0.010204082<br />prop_z: 0.07407407","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(47,189,124,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[67.5],"y":[0.015306122448979591],"text":"mid:  67.5<br />prop: 0.015306122<br />prop_z: 0.11111111","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(68,187,124,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[52.5],"y":[0.025510204081632654],"text":"mid:  52.5<br />prop: 0.025510204<br />prop_z: 0.18518519","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(97,183,122,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[62.5],"y":[0.030612244897959183],"text":"mid:  62.5<br />prop: 0.030612245<br />prop_z: 0.22222222","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(108,181,122,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[4.5,4.5],"base":[0,0],"x":[7.5,22.5],"y":[0.051020408163265307,0.051020408163265307],"text":["mid:   7.5<br />prop: 0.051020408<br />prop_z: 0.37037037","mid:  22.5<br />prop: 0.051020408<br />prop_z: 0.37037037"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(144,173,119,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[4.5,4.5,4.5],"base":[0,0,0],"x":[2.5,12.5,57.5],"y":[0.056122448979591837,0.056122448979591837,0.056122448979591837],"text":["mid:   2.5<br />prop: 0.056122449<br />prop_z: 0.40740741","mid:  12.5<br />prop: 0.056122449<br />prop_z: 0.40740741","mid:  57.5<br />prop: 0.056122449<br />prop_z: 0.40740741"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(152,170,118,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[47.5],"y":[0.081632653061224483],"text":"mid:  47.5<br />prop: 0.081632653<br />prop_z: 0.59259259","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(186,157,115,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[17.5],"y":[0.091836734693877556],"text":"mid:  17.5<br />prop: 0.091836735<br />prop_z: 0.66666667","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(198,152,114,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[37.5],"y":[0.10204081632653061],"text":"mid:  37.5<br />prop: 0.102040816<br />prop_z: 0.74074074","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(210,145,113,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[42.5],"y":[0.11224489795918367],"text":"mid:  42.5<br />prop: 0.112244898<br />prop_z: 0.81481481","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(221,138,112,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[32.5],"y":[0.11734693877551021],"text":"mid:  32.5<br />prop: 0.117346939<br />prop_z: 0.85185185","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(227,135,111,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":4.5,"base":0,"x":[27.5],"y":[0.13775510204081631],"text":"mid:  27.5<br />prop: 0.137755102<br />prop_z: 1.00000000","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":18,"base":0,"x":[290],"y":[0.014999999999999999],"text":"mid: 290.0<br />prop: 0.015000000<br />prop_z: 0.16666667","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(91,184,123,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[18,18],"base":[0,0],"x":[150,170],"y":[0.055,0.055],"text":["mid: 150.0<br />prop: 0.055000000<br />prop_z: 0.61111111","mid: 170.0<br />prop: 0.055000000<br />prop_z: 0.61111111"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(189,156,115,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":18,"base":0,"x":[230],"y":[0.059999999999999998],"text":"mid: 230.0<br />prop: 0.060000000<br />prop_z: 0.66666667","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(198,152,114,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[18,18,18],"base":[0,0,0],"x":[110,250,270],"y":[0.065000000000000002,0.065000000000000002,0.065000000000000002],"text":["mid: 110.0<br />prop: 0.065000000<br />prop_z: 0.72222222","mid: 250.0<br />prop: 0.065000000<br />prop_z: 0.72222222","mid: 270.0<br />prop: 0.065000000<br />prop_z: 0.72222222"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(207,147,113,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[18,18,18],"base":[0,0,0],"x":[30,70,190],"y":[0.070000000000000007,0.070000000000000007,0.070000000000000007],"text":["mid:  30.0<br />prop: 0.070000000<br />prop_z: 0.77777778","mid:  70.0<br />prop: 0.070000000<br />prop_z: 0.77777778","mid: 190.0<br />prop: 0.070000000<br />prop_z: 0.77777778"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(216,142,112,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[18,18],"base":[0,0],"x":[90,210],"y":[0.074999999999999997,0.074999999999999997],"text":["mid:  90.0<br />prop: 0.075000000<br />prop_z: 0.83333333","mid: 210.0<br />prop: 0.075000000<br />prop_z: 0.83333333"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(224,137,111,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":18,"base":0,"x":[10],"y":[0.080000000000000002],"text":"mid:  10.0<br />prop: 0.080000000<br />prop_z: 0.88888889","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(232,131,111,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[18,18],"base":[0,0],"x":[50,130],"y":[0.089999999999999997,0.089999999999999997],"text":["mid:  50.0<br />prop: 0.090000000<br />prop_z: 1.00000000","mid: 130.0<br />prop: 0.090000000<br />prop_z: 1.00000000"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":55.452054794520549,"r":7.3059360730593621,"b":25.570776255707766,"l":48.949771689497723},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Histograms of numeric columns in df::ebola_sierra_leone","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,0.47924449979244499],"automargin":true,"type":"linear","autorange":false,"range":[-3.7250000000000001,83.724999999999994],"tickmode":"array","ticktext":["0","20","40","60","80"],"tickvals":[0,20,40,60,80],"categoryorder":"array","categoryarray":["0","20","40","60","80"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.0068877551020408156,0.14464285714285713],"tickmode":"array","ticktext":["0.00","0.05","0.10"],"tickvals":[0,0.050000000000000003,0.10000000000000001],"categoryorder":"array","categoryarray":["0.00","0.05","0.10"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"annotations":[{"text":"Probability","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-33.607305936073068},{"text":"age","x":0.23962224989622249,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"},{"text":"id","x":0.76037775010377751,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(26,26,26,1)","family":"","size":11.68949771689498},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":0.47924449979244499,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.47924449979244499,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0.52075550020755501,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":"rgba(217,217,217,1)","line":{"color":"transparent","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.52075550020755501,"x1":1,"y0":0,"y1":23.37899543378996,"yanchor":1,"ysizemode":"pixel"}],"xaxis2":{"type":"linear","autorange":false,"range":[-13.9,313.89999999999998],"tickmode":"array","ticktext":["0","100","200","300"],"tickvals":[0,100,200,300],"categoryorder":"array","categoryarray":["0","100","200","300"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0.52075550020755501,1],"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y2","title":"","hoverformat":".2f"},"yaxis2":{"type":"linear","autorange":false,"range":[-0.0044999999999999997,0.094500000000000001],"tickmode":"array","ticktext":["0.000","0.025","0.050","0.075"],"tickvals":[0,0.025000000000000005,0.050000000000000003,0.075000000000000011],"categoryorder":"array","categoryarray":["0.000","0.025","0.050","0.075"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"domain":[0,1],"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x2","title":"","hoverformat":".2f"},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"4d587abc7658":{"x":{},"y":{},"width":{},"fill":{},"type":"bar"}},"cur_data":"4d587abc7658","visdat":{"4d587abc7658":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="analyzing-individual-variables-numeric--" class="level1">
+<h1>Analyzing individual variables: numeric —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone<span class="sc">$</span>age</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  6.0 46.0   NA 25.0  8.0 49.0 13.0 50.0 35.0 38.0 60.0 18.0 10.0 14.0 50.0
+ [16] 35.0 43.0 17.0  3.0 60.0 38.0 41.0 49.0 12.0 74.0 21.0 27.0 41.0 42.0 60.0
+ [31] 30.0 50.0 50.0 22.0 40.0 35.0 19.0  3.0 34.0 21.0 73.0 65.0 30.0 70.0 12.0
+ [46] 15.0 42.0 60.0 14.0 40.0 33.0 43.0 45.0 14.0 14.0 40.0 35.0 30.0 17.0 39.0
+ [61] 20.0  8.0 40.0 42.0 53.0 18.0 40.0 20.0 45.0 40.0 60.0 44.0 33.0 23.0 45.0
+ [76]  7.0   NA 35.0 36.0 42.0 35.0 25.0 30.0 30.0 28.0 14.0 20.0 60.0 67.0 35.0
+ [91] 50.0  4.0 28.0 38.0 30.0 26.0 37.0 30.0  3.0 56.0 32.0 35.0 54.0 42.0 48.0
+[106] 11.0  1.8 63.0 55.0 20.0 62.0 62.0 42.0 65.0 29.0 20.0 33.0 30.0 35.0   NA
+[121] 50.0 16.0  3.0 22.0  7.0 50.0 17.0 40.0 21.0  9.0 27.0 52.0 50.0 25.0 10.0
+[136] 30.0 32.0 38.0 30.0 50.0 26.0 35.0  3.0 50.0 60.0 40.0 34.0  4.0 42.0   NA
+[151] 54.0 18.0 45.0 30.0 35.0 35.0 16.0 26.0 23.0 45.0 45.0 45.0 38.0 45.0 35.0
+[166] 30.0 60.0  5.0 18.0  2.0 70.0 35.0  3.0 30.0 80.0 62.0 20.0 45.0 18.0 28.0
+[181] 48.0 38.0 39.0 26.0 60.0 35.0 20.0 50.0 11.0 36.0 29.0 57.0 35.0 26.0  6.0
+[196] 45.0 27.0  6.0 40.0 29.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 33.84592</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>age_vec <span class="ot">&lt;-</span> ebola_sierra_leone<span class="sc">$</span>age</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(age_vec, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17.26864</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(age_vec, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(age_vec, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 80</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(age_vec, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   1.80   20.00   35.00   33.85   45.00   80.00       4 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(age_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 200</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(age_vec, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6633.8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing individual variables: numeric ----</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(age_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(age_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="analyzing-single-categorical-variable--" class="level1">
+<h1>Analyzing single categorical variable: —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ebola_sierra_leone<span class="sc">$</span>district</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+  [5] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+  [9] "Kenema"        "Kailahun"      "Kailahun"      "Kailahun"     
+ [13] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [17] "Kailahun"      "Kenema"        "Kono"          "Kailahun"     
+ [21] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+ [25] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [29] "Kenema"        "Kenema"        "Kenema"        "Kailahun"     
+ [33] "Kailahun"      "Bo"            "Kailahun"      "Kailahun"     
+ [37] "Kailahun"      "Kenema"        "Kenema"        "Kenema"       
+ [41] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [45] "Kailahun"      "Kailahun"      "Western Urban" "Kailahun"     
+ [49] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [53] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [57] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [61] "Kailahun"      "Kenema"        "Western Urban" "Kambia"       
+ [65] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [69] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [73] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+ [77] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+ [81] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [85] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+ [89] "Kailahun"      "Kenema"        "Kailahun"      "Kailahun"     
+ [93] "Kailahun"      "Kono"          "Port Loko"     "Kenema"       
+ [97] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[101] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[105] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[109] "Kailahun"      "Kailahun"      "Kenema"        "Western Urban"
+[113] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[117] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[121] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+[125] "Kailahun"      "Kenema"        "Kailahun"      "Port Loko"    
+[129] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[133] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[137] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[141] "Kailahun"      "Kailahun"      "Kailahun"      "Kenema"       
+[145] "Kenema"        "Kailahun"      "Kenema"        "Kailahun"     
+[149] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[153] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[157] "Kailahun"      "Kenema"        "Kailahun"      "Kailahun"     
+[161] "Kenema"        "Kailahun"      "Kailahun"      "Kailahun"     
+[165] "Kailahun"      "Bo"            "Kailahun"      "Kailahun"     
+[169] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[173] "Kenema"        "Kailahun"      "Kailahun"      "Kenema"       
+[177] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[181] "Kailahun"      "Kailahun"      "Kailahun"      "Western Urban"
+[185] "Kailahun"      "Kailahun"      "Kenema"        "Kailahun"     
+[189] "Kailahun"      "Kailahun"      "Kailahun"      "Kailahun"     
+[193] "Kailahun"      "Kenema"        "Kenema"        "Kailahun"     
+[197] "Kailahun"      "Kailahun"      "Kailahun"      "Kenema"       </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ebola_sierra_leone<span class="sc">$</span>district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+           Bo      Kailahun        Kambia        Kenema          Kono 
+            2           155             1            34             2 
+    Port Loko Western Urban 
+            2             4 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>janitor<span class="sc">::</span><span class="fu">tabyl</span>(ebola_sierra_leone, district, sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      district  F  M
+            Bo  0  2
+      Kailahun 91 64
+        Kambia  0  1
+        Kenema 20 14
+          Kono  0  2
+     Port Loko  1  1
+ Western Urban  2  2</code></pre>
+</div>
+</div>
+</section>
+<section id="analyzing-single-categorical-variable---1" class="level1">
+<h1>Analyzing single categorical variable: —-</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">table</span>(ebola_sierra_leone<span class="sc">$</span>district))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">esquisser</span>(ebola_sierra_leone)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ebola_sierra_leone) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> district) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill =</span> <span class="st">"#112446"</span>) <span class="sc">+</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="questions--" class="level1">
+<h1>Questions —-</h1>
+</section>
+<section id="when-was-the-first-case-reported-hint-look-at-the-date-of-sample" class="level1">
+<h1>When was the first case reported? (Hint: look at the date of sample)</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(ebola_sierra_leone<span class="sc">$</span>date_of_sample)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2014-05-23"</code></pre>
+</div>
+</div>
+</section>
+<section id="what-was-the-median-age-of-those-affected" class="level1">
+<h1>What was the median age of those affected?</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ebola_sierra_leone<span class="sc">$</span>age, <span class="at">na.rm =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35</code></pre>
+</div>
+</div>
+</section>
+<section id="had-there-been-more-cases-in-men-or-women" class="level1">
+<h1>Had there been more cases in men or women?</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>janitor<span class="sc">::</span><span class="fu">tabyl</span>(ebola_sierra_leone<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ebola_sierra_leone$sex   n percent
+                      F 114    0.57
+                      M  86    0.43</code></pre>
+</div>
+</div>
+</section>
+<section id="what-district-had-had-the-most-reported-cases" class="level1">
+<h1>What district had had the most reported cases?</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>janitor<span class="sc">::</span><span class="fu">tabyl</span>(ebola_sierra_leone<span class="sc">$</span>district)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> ebola_sierra_leone$district   n percent
+                          Bo   2   0.010
+                    Kailahun 155   0.775
+                      Kambia   1   0.005
+                      Kenema  34   0.170
+                        Kono   2   0.010
+                   Port Loko   2   0.010
+               Western Urban   4   0.020</code></pre>
+</div>
+</div>
+</section>
+<section id="by-the-end-of-june-2014-was-the-outbreak-growing-or-receding" class="level1">
+<h1>By the end of June 2014, was the outbreak growing or receding?</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ebola_sierra_leone) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> date_of_onset) <span class="sc">+</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>L, <span class="at">fill =</span> <span class="st">"#112446"</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="second_page_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

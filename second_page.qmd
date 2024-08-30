@@ -1,0 +1,138 @@
+---
+title: Ebola Sierra Leone analysis
+author: Lawal Omotola 
+date: 2024-06-29
+date-format: short
+---
+
+# Load packages ----
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+if(!require(pacman)) install.packages("pacman")
+pacman::p_load(
+  tidyverse, # meta-package
+  inspectdf,
+  plotly,
+  janitor,
+  visdat,
+  esquisse,
+  reactable
+)
+```
+
+# Load data ----
+
+```{r}
+library(readr)
+ebola_sierra_leone <- read_csv("C:/Users/Hon.Olayinka/Documents/GitHub/tv_hours_pages/ebola_sierra_leone.csv")
+```
+
+# Explore data ----
+
+```{r}
+head(ebola_sierra_leone)
+ncol(ebola_sierra_leone)
+nrow(ebola_sierra_leone)
+dim(ebola_sierra_leone)
+summary(ebola_sierra_leone)
+
+
+visdat::vis_dat(ebola_sierra_leone)
+```
+
+# Categorical overview ----
+
+```{r}
+cat_summary <- inspect_cat(ebola_sierra_leone)
+cat_summary_plot <- show_plot(cat_summary) # function nesting
+
+ggplotly(cat_summary_plot)
+```
+
+# Numerical overview ----
+
+```{r}
+num_summary <- inspect_num(ebola_sierra_leone)
+num_summary_plot <- show_plot(num_summary)
+ggplotly(num_summary_plot)
+```
+
+# Analyzing individual variables: numeric ----
+
+```{r}
+ebola_sierra_leone$age
+mean(ebola_sierra_leone$age, na.rm = TRUE)
+median(ebola_sierra_leone$age, na.rm = T)
+age_vec <- ebola_sierra_leone$age
+sd(age_vec, na.rm = T)
+min(age_vec, na.rm = T)
+max(age_vec, na.rm = T)
+summary(age_vec, na.rm = T)
+length(age_vec)
+sum(age_vec, na.rm = T)
+
+# Visualizing individual variables: numeric ----
+hist(age_vec)
+boxplot(age_vec)
+
+```
+
+# Analyzing single categorical variable: ----
+
+```{r}
+ebola_sierra_leone$district
+
+table(ebola_sierra_leone$district)
+
+janitor::tabyl(ebola_sierra_leone, district, sex)
+```
+
+# Analyzing single categorical variable: ----
+
+```{r}
+barplot(table(ebola_sierra_leone$district))
+
+esquisser(ebola_sierra_leone)
+
+ggplot(ebola_sierra_leone) +
+  aes(x = district) +
+  geom_bar(fill = "#112446") +
+  theme_minimal()
+```
+
+# Questions ----
+
+# When was the first case reported? (Hint: look at the date of sample)
+
+```{r}
+min(ebola_sierra_leone$date_of_sample)
+```
+
+# What was the median age of those affected?
+
+```{r}
+median(ebola_sierra_leone$age, na.rm = T)
+```
+
+# Had there been more cases in men or women?
+
+```{r}
+janitor::tabyl(ebola_sierra_leone$sex)
+```
+
+# What district had had the most reported cases?
+
+```{r}
+janitor::tabyl(ebola_sierra_leone$district)
+```
+
+# By the end of June 2014, was the outbreak growing or receding?
+
+```{r}
+ggplot(ebola_sierra_leone) +
+  aes(x = date_of_onset) +
+  geom_histogram(bins = 30L, fill = "#112446") +
+  theme_minimal()
+```
